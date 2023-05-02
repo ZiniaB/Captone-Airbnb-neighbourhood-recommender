@@ -1,20 +1,14 @@
 
+BrainStation Data Science Diploma - Capstone Project 
 
-Capstone Project 
-
-# <Project Title: Using Machine Learning to develop a recommendation system for London neighbourhoods>
+# <Project Title: Using Machine Learning to develop an airbnb recommender for London neighbourhoods>
 ## <Student Name: Zinia Bhattacharya>
 
 ==============================
 
 ## Project Description and Context
 
-Airbnb currently has a number of features to help personalize the property based on guest requirements e.g.<br>
-- Price range
-- Type of stay and property (Entire apartment/private room etc or House/Flat/Guest House etc)
-- Number of rooms & beds
-- Amenities
-- Host details
+Airbnb currently has many existing features to help select properties according to a guest's specific requirements e.g.<br> Price range, Type of property, size of the property, amenities, host details etc.
 
 For listings and experiences in the countryside, Airbnb also provides additional recommendations to personalize one's stay e.g. Vineyards, Farms, Countryside, Surfing, Lakes, Beaches, Designer homes, Tiny homes etc.
 **However, when it comes to city stays, currently consumers are shown all available properties on a map without any location recommendations or filters</mark>.** <br>
