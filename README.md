@@ -1,5 +1,5 @@
 
-BrainStation Data Science Diploma - Capstone Project 
+## BrainStation Data Science Diploma - Capstone Project 
 
 # <Project Title: Using Machine Learning to develop an airbnb recommender for London neighbourhoods>
 ## <Student Name: Zinia Bhattacharya>
@@ -13,11 +13,11 @@ Airbnb currently has many existing features to help select properties according 
 For listings and experiences in the countryside, Airbnb also provides additional recommendations to personalize one's stay e.g. Vineyards, Farms, Countryside, Surfing, Lakes, Beaches, Designer homes, Tiny homes etc.
 **However, when it comes to city stays, currently consumers are shown all available properties on a map without any location recommendations or filters</mark>.** <br>
 
-Potential airbnb guests have to scroll through comments to get a 'feel' of the neighbourhood or, they need to research separately about the suitability of the location, before narrowing down on a property. Looking at Google Search trends, searches around 'Where to stay in London' have an average relative popularity score of 70. For comparison, Goggle's own relative score is 91 and Amazon is approx 72 in the United in the same time period of last 1 year. So evidently, people are seeking this information to guide their decision on where to stay in London during their visit.
+Potential airbnb guests have to scroll through comments to get a 'feel' of the neighbourhood or, they need to research separately about the suitability of the location, before narrowing down on a property. Looking at Google Search trends, searches around 'Where to stay in London' have an average relative popularity score of 70. For comparison, Goggle's own relative score is 91 and Amazon is approx 72 in the UK in the same time period of last 1 year and clearly, people are seeking this information to guide their decision on where to stay in London during their visit.
 
-Adding such recommendation to the Airbnb site, can enhance the user-experience without the guest having to leave the Airbnb ecosystem for location guidance. It can also pave the way for sustainable tourism and drive tourism revenue for ‘under-the radar’ neighbourhoods and ease tourist overcrowding in central London <br>
+Adding neighbourhood recommendations to the Airbnb site can enhance the user-experience on the airbnb platform without the guest having to leave the Airbnb ecosystem for location guidance. It can also pave the way for sustainable tourism and drive tourism revenue for ‘under-the radar’ neighbourhoods and ease tourist overcrowding in central London <br>
 
-This recommendation system also has the potential to be extended to other short-term rental booking sites and hotels and expanded to other top cities globally
+This recommendation system also has the potential to be extended to other short-term rental booking sites and hotels and can be expanded to other top cities globally. It currently uses only publicly available data. By overlaying customer data that a platform like airbnb would have access to, the recommendations can be even more personalized by tappiing into past travel history and customer profiles.
 
 ----------------------
 
@@ -45,6 +45,36 @@ Requirements
 ------------------------
 
 ## Data sourcing and pre-processing
+#### Data Source 1: insideairbnb
+
+Data sourced from insideairbnb.com <br>
+Date range : The data spans from 2011-2022 <br>
+Data File : Listings <br>
+
+**Data Dictionary**
+The key columns in the dataset are as below:
+Some of the columns do not have any data recorded and will be dropped prior to our analysis
+
+| Column                             | Description                                                            |
+| :---                               |    :----:                                                              |
+| id                                 | Unique id for the specific property/listing                            |
+| name                               | Name or short description of the property/listing                      |
+| neighbourhood_overview             | Description of the neighbourhood in the listing                        |
+| neighbourhood_cleansed             | The London borough, the listing is located in                          |
+| latitude                           | Latitude of the property location                                      |
+| longitude                          | Longitude of the property location                                     |
+| minimum_nights                     | The minimum required nights for booking                                |
+| property_type                      | The type of the rental property, Entire home or Private room           |
+| price                              | Average per night price of the listing                                 |
+| review_scores_location             | Total number of current reviews of the property                        |
+| suburb                             | Imputed value after reverse geo-coding against Latitude and Longitude  |
+
+#### Data Source 2: ChatGPT as additional source to analyse the characteristics of different neighbourhoods in London
+Using the said prompt on Chat GPT, we collated suburb_tags across top 100 suburbs in London:
+*'Provide neighbourhood characteristics of the following suburbs in London'*
+Note: We initially used the Openai API and to integrate the 'suburb profiles' data. However, it became evident that the prompt in the API code would require a number of attempts to get the required output (some of the observations have been noted at the end of the document for reference) and in the interest of time and to be able to run the project with limited resources/budget, we found the manual prompts to be mosr effective for this project.
+ 
+ 
 The data pre-processing step was a critical part of the project due to the nature of the data required - `suburb` level data being key and the dataset did not come pre-populated with this.<br>
 
 The key steps in the data-sourcing and data pre-processing stage were:
@@ -160,6 +190,12 @@ https://radimrehurek.com/gensim/models/ldamodel.html <br>
 https://pyldavis.readthedocs.io/en/latest/modules/API.html <br>
 
 
-
+## Additional notes on Openai API integration
+1) Initial test with Openai API returned neighbourhood profiles for suburbs in Australia, as some of the names are common. This could be easily fixed by specifying the city name in the code
+2) The prompt also returned an output that included the name of the suburb in each case e.g. 'Bethnal Green is a very diverse community' or 'Pimlico is one of the oldest suburbs'. This would require further edit to remove the suburb names from the description and processing this text further prior to modelling
+3) When using the API, a lot of neighbourhood descriptions began with 'x neighbourhood is a great place to live' leading to overlap and not enough distinction between neighbourhood descriptions, a key requirement of the project
+4) Cost was also a factor. Running it on the full dataset would be time and cost intensive. An alternative approach would be to use the API to provide details for just the distinct neighbourhood names and then extrapolate that to the full dataset separately, as opposed to calling the API on the total dataset directly.
+ 
+Overall, it was a really good learning experience and it provided a very useful insight into the workings of the Open AI API
 
 ------------
