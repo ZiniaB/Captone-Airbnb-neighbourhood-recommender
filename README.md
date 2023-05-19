@@ -94,19 +94,19 @@ The EDA has been primarily carried out in Tableau but we have also used python J
 
 Key insights from the EDA:
 
-(1) Central London boroughs had the highest concentration property listings with Westminister being significantly higher than the rest at 4500 listings and likely because of the popular suburbs like Hyde Park, Soho, Mayfair, Covent Garden etc that fall within it. This could suggest a strong demand for locations close to the tourist hubs but also from the host's POV, it is possible that many central London properties have been repurposed for airbnb listings and are 'commercially managed' by professional hosts <br>
+(1) Central London boroughs had the highest concentration of property listings, with Westminister being significantly higher than the rest at 4500 listings - likely due to the popular suburbs like Hyde Park, Soho, Mayfair, Covent Garden etc that fall within it. This could suggest a strong demand for locations close to the tourist hubs but also from the host's POV, it is possible that many central London properties have been repurposed for airbnb listings and are 'commercially managed' by professional hosts <br>
 (2) When the data is broken down by suburb, Whitechapel comes out as the suburb with the highest number of listings at 1000 but interestingly it does not fall in the Westminister borough but within Tower Hamlets which has the 3rd highest number of listings at a borough level <br>
 (3) The Average #night price varies distinctly between boroughs e.g. $225+ for Westminister vs. ~$170 for Tower Hamlets and ~$75 for Bexley <br>
 (4) The length of stay also tends to differ with some of the centrally located popular boroughs having a longer stay and Greenwich being the highest at 8+ nights <br>
 (5) The Review Scores for location are very strong and skewed highly towards 5. This suggests that the guests were broadly satisfied with the location they chosee based on their individual preferences. This is good news for our project as there is no particular neighborhood that stands out as 'negative' in terms of scores. We can go ahead and include all neighborhoods in our recommendation system to be able to ensure that all neighborhood listings are fairly represented and are considered by the guests.
 
-Overall, our EDA has established that there are many factors that come into play when choosing a property e.g. availability (number of listings within the timeframe), room type, price, length of stay etc. Also, in terms of location, different neighborhoods appear to serve different customer needs (accesibility, affordability, experience) and our hypothesis that the customer could benefit from an initial recommendation on neighborhoods, very much holds true given all the aforementioned factors that they need to consider while choosing a property.
+Overall, our EDA has established that there are many factors that come into play when choosing a property e.g. availability (number of listings within the timeframe), room type, price, length of stay etc. Also, in terms of location, different neighborhoods appear to serve different customer needs (accessibility, affordability, experience) and our hypothesis that the customer could benefit from an initial recommendation on neighborhoods, very much holds true given all the aforementioned factors that they need to be considered while choosing a property.
 
 --------------------------
 
 ## Modelling Part 1
 
-This being an unsupervised NLP project, processing the text data in the right way to then test the outcome against different models was the basis of our machine learning task.
+This being an unsupervised NLP project, processing the text data in the right way, to then test the outcome against different models was the basis of our machine learning task.
 
 **Steps in text processing and modelling:**<br>
 (1) Cleaning and preparing the text data for modelling:<br>
@@ -120,12 +120,12 @@ This being an unsupervised NLP project, processing the text data in the right wa
 (5) KMeans modelling on sample dataset<br>
 
 **LDA modelling approach and outcome:**<br>
-Latent Dirichlet Allocation model is usually used in topic modelling. Here we have applied it to model the distribution of words in the document 'neighborhood_overview`. The intuition behind LDA is that each document in a corpus is a mixture of several topics, and each topic is a probability distribution over words used to describe the topic. LDA was our first choice because of its ability to infer the underlying topics and their associated word distributions from the observed documents <br>
+Latent Dirichlet Allocation model is usually used in topic modelling. Here we have applied it to model the distribution of words in the document 'neighborhood_overview`. The intuition behind LDA is that each document in a corpus is a mixture of several topics, and each topic is a probability distribution over words used to describe the topic. LDA was our first choice because of its ability to infer the underlying topics and their associated word distributions from the observed documents. Here, topic would refere to key themes in the neighbourhood characteristics<br>
  
 We utilized the Gensim library for LDA topic modelling. Gensim stands for “Generate Similar” and is a popular open source natural language processing library used for unsupervised topic modeling. We also used the pylDavis library for visualizing and interpreting the topics in the LDA model.
 
 
-The LDA model performed relatively well in allocating neighbourhood descriptions broadly across 5 profiles based on frequency of suburb names, proximity to specific attractions and unique descriptions of the neighborhood e.g. trendy, open etc
+The LDA model performed relatively well in allocating neighbourhood descriptions broadly across 5 profiles based on frequency of suburb names, proximity to specific attractions and unique descriptions of the neighbourhood e.g. trendy, open etc
 
 Profile 1: Tourist attractions and restaurants <br>
 Profile 2: Neighbourhoods with easy transport accessibility <br>
@@ -150,30 +150,30 @@ CountVectorizer simply counts the number of times a word appears in a document, 
 We have used the TF-IDF ventorized data for our KMeans modelling since it takes the relative importance of the tokens into account. However, the KMeans model did not perform too well in terms of creating distinct clusters of neighbourhood characteristics. Looking at the top terms per cluster, we could see a lot of overlap across clusters leading us to the conclusion that KMeans with TF-IDF is perhaps not the right model for our dataset.
 
 **KMeans modelling with word embedding:**<br>
-We then applied word-embedding, given their proven effectiveness in NLP tasks as they are able to capture the semantic meaning and contextual relationships of the words. We used the distilBERT embedding model which is pretrained for sentence embeddings and we tested it on a small subset of our dataframe. The results, although not enirely robust, are encouraging as we can start to see some distinct neighbourhood profiles.<br>
+We then applied word-embedding, given their proven effectiveness in NLP tasks as they are able to capture the semantic meaning and contextual relationships of the words. We used the distilBERT embedding model which is pretrained for sentence embeddings and we tested it on a small subset of our dataframe. The results, although not enirely robust, were encouraging as we see some distinct neighbourhood profiles coming through.<br>
 
-In conclusion, KMeans with word-embedding appears to work better than the other models and can result in clearer clusters with more fine-tuning of the corpus.
+In conclusion, KMeans with word-embedding appeared to work better than the other models resulting in clearer clusters.
 
 
 ## Modelling Part 2
 In part 2 of our modelling task, we introduce an additional data source. Here, we have used ChatGPT to source neighbourhood characteristics of the top 100 suburbs (sorted by number of airbnb listings).
-From our initial modelling, we recognized that the way neighbourhoods are described in the airbnb listings can be limiting in profiling the suburbs appropriately. It is primarily because neighbourhood descriptions are written in a way that highlight accessibility of the property to Central London or to tourist attractions and parks and restaurants resulting in very similar terms across majority of listings.
+From our initial modelling, we recognized that the way neighbourhoods are described in the airbnb listings can be limiting in profiling the suburbs appropriately. It is primarily because neighbourhood descriptions are written in a way that highlight accessibility of the property to Central London/tourist attractions and parks & restaurants, resulting in very similar terms across majority of listings.
 The project's emphasis was to identify unique neighbourhood vibes and match neighbourhoods to distinct guest preferences. For this purpose, Chat GPT's neighbourhood descriptions proved very useful and relevant.
 
-Following on from our work in Part 1, we applied diltilBERT sentence embedding on ChatGPT's neighbourhood descriptions(suburb_tags) and ran KMeans and DBSCAN clustering models. DBSCAN did not perform well but KMeans results were very encouraging. We identified some distinct neighbourhood clusters that can form a strong basis to for our neighbourood recommender system.
+Following on from our work in Part 1, we applied diltilBERT sentence embedding on ChatGPT's neighbourhood descriptions(suburb_tags) and ran KMeans and DBSCAN clustering models. DBSCAN did not perform well but KMeans results were very encouraging. We identified some distinct neighbourhood clusters that can form a strong basis for our neighbourood recommender system.
 
 
 ## Modelling Part 3
 In the last part of our modelling task, we ran diltilBERT sentence embedding on the full dataset of 40605 rows on the column `neighborhood_overview`.
 It was computationally extremely expensive but the objective was to look at the result in its entirety. Unfortunately, this did not perform well due to the reasons noted earier about the nature of the neighborhood descriptions in the dataset.
 
-We will disregard the outcome of this exercise in our final recommendations but will retain the work done on this, for future reference
+We have disregarded the outcome of this last modelling exercise in our final recommendations but has been included here, for future reference.
 
 ------------------------------
 
 ## Closing notes
 
-In conclusion, word or sentence embedding is a really effective way to process and analyze text data, as long as the data is specific to the task at hand. DiltilBERT model proved very effective in clustering profiles based on ChatGPT data but fairly inconclusive on airbnb listing's neighborhood descriptions due to the significant overlap in words across all properties.
+In conclusion, word or sentence embedding is a really effective way to process and analyze text data, as long as the data is specific to the task at hand. DisltilBERT model proved very effective in clustering profiles based on ChatGPT data but fairly inconclusive on airbnb listing's neighborhood descriptions due to the significant overlap in words across all properties.
 
 Sentence-embedding and KMeans on ChatGPT neighborhood profiles led to a solid baseline clustering of nLondon neighbourhoods and as next steps, we will fine-tune and expand that model to include all suburbs, beyond the Top100 for a complete neighbourhood recommender system for airbnb London
 
